@@ -1,0 +1,9 @@
+type Room {
+    id: Int
+    name: String
+    size: String
+}
+
+type Query {
+    getEmptyRoom(time: String): Room
+}

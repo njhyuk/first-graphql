@@ -1,0 +1,5 @@
+type User {
+    id: Int
+    name: String
+    team: String
+}

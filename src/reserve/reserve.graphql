@@ -1,0 +1,21 @@
+type Reserve {
+    id: Int
+    startedAt: String
+    endedAt: String
+    user: User
+    room: Room
+}
+
+input ReserveInput {
+    roomId: Int
+    startedAt: Int
+    endedAt: Int
+}
+
+type Mutation {
+    createReserve(reserve: ReserveInput): String,
+}
+
+type Query {
+    getReserves: [Reserve]
+}
