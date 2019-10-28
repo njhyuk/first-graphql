@@ -11,8 +11,8 @@ export class ReserveResolver {
   }
 
   @Query()
-  getReserves(): Promise<Reserve[]> {
-    return this.reserveService.findAll();
+  getReservesByWeek(): Promise<Reserve[]> {
+    return this.reserveService.thisWeek();
   }
 
   @Mutation('createReserve')

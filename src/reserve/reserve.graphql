@@ -18,5 +18,5 @@ type Mutation {
 }
 
 type Query {
-    getReserves: [Reserve]
+    getReservesByWeek: [Reserve]
 }

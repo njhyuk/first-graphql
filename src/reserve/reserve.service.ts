@@ -1,12 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reserve } from './reserve.entity';
-import { LessThan, MoreThan, Repository } from 'typeorm';
+import { LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { ReserveDto } from './reserve.dto';
 import { UserService } from '../user/user.service';
 import { RoomService } from '../room/room.service';
 import { Room } from '../room/room.entity';
-import { transformAndValidate } from 'class-transformer-validator';
 import moment = require('moment');
 
 @Injectable()
@@ -19,8 +18,11 @@ export class ReserveService {
   ) {
   }
 
-  findAll(): Promise<Reserve[]> {
-    return this.reservesRepository.find();
+  thisWeek(): Promise<Reserve[]> {
+    return this.reservesRepository.find({
+      startedAt: LessThan(moment().endOf('week').toDate()),
+      endedAt: MoreThan(moment().startOf('week').toDate()),
+    });
   }
 
   async checkTime(room: Room, startedAt: Date, endedAt: Date): Promise<boolean> {
