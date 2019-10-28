@@ -6,13 +6,14 @@
 
 /* tslint:disable */
 export class ReserveInput {
+    userId?: number;
     roomId?: number;
-    startedAt?: number;
-    endedAt?: number;
+    startedAt?: string;
+    endedAt?: string;
 }
 
 export abstract class IMutation {
-    abstract createReserve(reserve?: ReserveInput): string | Promise<string>;
+    abstract createReserve(reserve?: ReserveInput): Reserve | Promise<Reserve>;
 }
 
 export abstract class IQuery {

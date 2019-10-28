@@ -17,11 +17,13 @@ export class Reserve {
 
   @Column({
     type: 'datetime',
+    nullable: true,
   })
   startedAt: Date;
 
   @Column({
     type: 'datetime',
+    nullable: true,
   })
   endedAt: Date;
 }

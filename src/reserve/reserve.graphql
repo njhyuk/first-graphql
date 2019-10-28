@@ -7,13 +7,14 @@ type Reserve {
 }
 
 input ReserveInput {
+    userId: Int
     roomId: Int
-    startedAt: Int
-    endedAt: Int
+    startedAt: String
+    endedAt: String
 }
 
 type Mutation {
-    createReserve(reserve: ReserveInput): String,
+    createReserve(reserve: ReserveInput): Reserve,
 }
 
 type Query {
