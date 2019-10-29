@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reserve } from './reserve.entity';
-import { LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
+import { LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Not, Repository } from 'typeorm';
 import { ReserveDto } from './reserve.dto';
 import { UserService } from '../user/user.service';
 import { RoomService } from '../room/room.service';
@@ -13,6 +13,8 @@ export class ReserveService {
   constructor(
     private readonly userService: UserService,
     private readonly roomService: RoomService,
+    @InjectRepository(Room)
+    private readonly roomsRepository: Repository<Room>,
     @InjectRepository(Reserve)
     private readonly reservesRepository: Repository<Reserve>,
   ) {
@@ -33,11 +35,33 @@ export class ReserveService {
     });
   }
 
+  protected timeFormat(time: string): Date {
+    return moment(time).toDate();
+  }
+
+  async getEmptyRooms(startedAt: string, endedAt: string): Promise<Room[]> {
+    return this.roomsRepository.createQueryBuilder('room')
+      .where(`NOT EXISTS (
+      SELECT
+        id
+      FROM
+        reserve
+      WHERE
+        reserve.roomId = room.id AND
+        reserve.startedAt < :endedAt AND
+        reserve.endedAt > :startedAt
+      )`, {
+        endedAt: this.timeFormat(endedAt),
+        startedAt: this.timeFormat(startedAt),
+      })
+      .getMany();
+  }
+
   async create(data: ReserveDto): Promise<Reserve> {
     const user = await this.userService.findOne(data.userId);
     const room = await this.roomService.findOne(data.roomId);
-    const startedAt = moment(data.startedAt).toDate();
-    const endedAt = moment(data.endedAt).toDate();
+    const startedAt = this.timeFormat(data.startedAt);
+    const endedAt = this.timeFormat(data.endedAt);
 
     if (!(user && room)) {
       throw new BadRequestException('not found data.');

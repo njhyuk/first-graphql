@@ -19,7 +19,7 @@ export abstract class IMutation {
 export abstract class IQuery {
     abstract getReservesByWeek(): Reserve[] | Promise<Reserve[]>;
 
-    abstract getEmptyRoom(time?: string): Room | Promise<Room>;
+    abstract getEmptyRooms(startedAt?: string, endedAt?: string): Room[] | Promise<Room[]>;
 }
 
 export class Reserve {
