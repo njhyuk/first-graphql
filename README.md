@@ -1,8 +1,5 @@
 ## Description
 
-* GraphQL 을 학습하기 위해 작업하였으며, 간단한 회의실 예약 API를 작성하였음.
-* http://localhost:3000/graphql 에 접속하여, 다음의 쿼리를 날려 테스트 하였음.
-
 ```graphql
 query reserveStatus {
   getReservesByWeek {
